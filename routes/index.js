@@ -7,27 +7,30 @@ router.get('/', function(req, res, next) {
 	res.render('index', { title:'Express'});
 });
 
-router.post('', function(req, res, next) {
-	console.log('Search term: ' + req.body.query);
+router.post('/s', function(req, res, next) {
+	console.log('Search term: ' + req.body.searchterm);
+	console.log(req.body);
 	var search = {};
-	search['term'] = req.body.term;
+	search['term'] = req.body.searchterm;
 
-	request('http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findCompletedItems&SERVICE-VERSION=1.7.0&SECURITY-APPNAME=ScottBer-testing-PRD-913d8b941-841f4c02&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+search.term+'&sortOrder=PricePlusShippingLowest', function (error, response, body) {
+	request('http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findCompletedItems&SERVICE-VERSION=1.7.0&SECURITY-APPNAME=ScottBer-testing-PRD-913d8b941-841f4c02&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+search.term, function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
 	  	var parsed = JSON.parse(body);
 	  	var tbl = [];
 	  	var total = 0;
 	  	var sold = 0;
 	    parsed.findCompletedItemsResponse[0].searchResult[0].item.map(function(r) { 
-	    	tbl.push(r.title[0]);
+	    	tbl.push({title:r.title[0], price:r.sellingStatus[0].convertedCurrentPrice[0].__value__, didsell:r.sellingStatus[0].sellingState[0]});
 	    	total++;
 	    	if (r.sellingStatus[0].sellingState[0] == "EndedWithSales") {
 	    		sold++;
 	    	}
-	    	console.log(r.sellingStatus[0].sellingState[0]);
+	    	console.log(r.title[0]);
 	    });
 	    //console.log(tbl);
-	    res.render('index', { title:'Express', tbl:tbl, total:total, sold:sold});
+	    //res.render('index', { title:'Express', tbl:tbl, total:total, sold:sold});
+	    res.setHeader('Content-Type', 'application/json');
+    	res.send(JSON.stringify({ title:'Express', tbl:tbl, total:total, sold:sold}));
 	  }
 	})
   

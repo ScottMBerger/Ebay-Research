@@ -4,21 +4,32 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+    <script src="/javascripts/script.js"></script>
   </head>
-  <body ng-app="app" ng-controller="ctrl">
+  <body ng-app="app" ng-controller="first">
     <h1>Marketplace Warrior</h1>
-    {{5+6}}
-    <form method="post">
-	    <input type="text" name="term">
-	    <input type="submit" value="Search">
+    <form>
+	    <input type="text" ng-model="searchterm" required>
+	    <button  type="submit" ng-click="search()">Search</button>
 		</form>
-    <% if (typeof sold !== 'undefined') { %>
-	    <p>Sold:<%= sold %>/<%= total %> = <%= sold/total*100 %>%</p>
-	    <ul>
-			<% for(var i=0; i<tbl.length; i++) {%>
-			   <li><%= tbl[i] %></li>
-			<% } %>
-			</ul>
-		<% }; %>
+		
+		<div ng-if="result">
+			<div >
+				<p><input type="checkbox" ng-model="outBox" ng-click="outliers(outBox)"> Filter outlier's</p>
+			</div>
+			
+	    <p>Sold: {{ result.sold }} /{{ result.total }} = {{ result.sold/result.total*100 }}%</p>
+
+			<table>
+			  <tr ng-repeat="x in result.tbl track by $index">
+			    <td>{{ x.price }}</td>
+			    <td>{{ x.title }}</td>
+			    <td>{{ x.didsell == "EndedWithSales" ? "Yes" : "No" }}</td>
+			  </tr>
+			</table>
+		</div>
+
+
   </body>
 </html>
