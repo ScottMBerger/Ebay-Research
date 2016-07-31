@@ -6,3 +6,25 @@ body {
 a {
   color: #00B7FF;
 }
+
+table.listings {
+    table-layout:fixed;
+}
+
+.xout {
+	width:15px;
+}
+
+.tblrow {
+	border-style: solid;
+	border-width: 1px;
+}
+
+.green {
+	background-color: #d5fdd5;
+}
+
+.red {
+	background-color: #ffb2b2;
+}
+
