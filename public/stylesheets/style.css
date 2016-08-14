@@ -23,8 +23,14 @@ table.listings {
 .green {
 	background-color: #d5fdd5;
 }
+.greenText {
+	color: #009900;
+}
 
 .red {
 	background-color: #ffb2b2;
+}
+.redText {
+	color: #b20000;
 }
 

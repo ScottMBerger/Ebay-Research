@@ -10,7 +10,7 @@
   <body ng-app="app" ng-controller="first">
     <h1>Marketplace Warrior</h1>
     <form>
-	    <input type="text" ng-model="searchterm" required>
+	    <input type="text" ng-model="searchTerm" required>
 	    <button  type="submit" ng-click="search()">Search</button>
 		</form>
 		
@@ -18,10 +18,15 @@
 			<div >
 				<p><input type="checkbox" ng-model="outBox" ng-click="outliers(outBox)"> Filter outlier's</p>
 			</div>
-			<p><strong>Current 30 Day Period Average</strong></p>
-			<p>Sold Per Day: {{ result.cur30.sold/30 }}<br> Listed Per Day: {{ result.cur30.listed/30 }}</p>
-			<p><strong>Previous 60 Day Period Average</strong></p>
-			<p>Sold Per Day: {{ result.prev60.sold/60 }}<br> Listed Per Day: {{ result.prev60.listed/60 }}</p>
+
+			<p><strong>Current Trends</strong><br>
+			Demand has <span ng-class="{ 'greenText': demand >= 0, 'redText': demand < 0 }">{{demand > 0 ? "in" : "de"}}creased</span> by {{Math.abs(demand)}}%<br>
+			Supply has <span ng-class="{ 'greenText': supply >= 0, 'redText': supply < 0 }">{{supply > 0 ? "in" : "de"}}creased</span> by {{Math.abs(supply)}}%</p>
+
+			<p><strong>Current 30 Day Period Average</strong><br>
+			Sold Per Day: {{ result.cur30.sold/30 }}<br> Listed Per Day: {{ result.cur30.listed/30 }}</p>
+			<p><strong>Previous 60 Day Period Average</strong><br>
+			Sold Per Day: {{ result.prev60.sold/60 }}<br> Listed Per Day: {{ result.prev60.listed/60 }}</p>
 	    <p>Sold: {{ result.sold }} /{{ result.total }} = {{ result.sold/result.total*100 }}%</p>
 
 			<table class="listings">

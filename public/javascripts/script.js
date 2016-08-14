@@ -2,17 +2,21 @@
 var app = angular.module('app', ['ngAnimate']);
 
 app.controller('first', function($scope, $rootScope, $http, $timeout) {
-	$scope.searchterm = '';
+	$scope.Math = window.Math
+
+	$scope.searchTerm = '';
 	$scope.search = function() {
-		console.log($scope.searchterm);
+		console.log($scope.searchTerm);
 		$http({
-        url: '/s',
+        url: '/api/search',
         method: "POST",
-        data: { 'searchterm' : $scope.searchterm }
+        data: { 'searchTerm' : $scope.searchTerm }
     })
     .then(function(response) {
-      $scope.result = angular.fromJson(response).data;
-      $scope.result.tbl.sort(keysrt('price'));
+      $scope.result = angular.fromJson(response).data
+      $scope.demand = (-100+($scope.result.cur30.sold/($scope.result.prev60.sold/2)*100)).toFixed(1)
+      $scope.supply = (-100+($scope.result.cur30.listed/($scope.result.prev60.listed/2)*100)).toFixed(1)
+      $scope.result.tbl.sort(keysrt('price'))
     }, 
     function(response) { // optional
             // failed
@@ -72,7 +76,6 @@ function filterOutliers(someArray) {
 
     // Then sort
     values.sort(keysrt('price'));
-
 
     /* Then find a generous IQR. This is generous because if (values.length / 4) 
      * is not an int, then really you should average the two elements on either 
