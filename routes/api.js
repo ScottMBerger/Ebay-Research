@@ -58,7 +58,7 @@ router.post('/search', function(req, res, next) {
 	  	var pageInfo = parsed.findCompletedItemsResponse[0].paginationOutput[0];
 	  	console.log(pageInfo.pageNumber[0]+' '+pageInfo.totalPages[0]);
 	  	if (pageInfo.pageNumber[0] < 10 && pageInfo.pageNumber[0] < pageInfo.totalPages[0]) {
-	  		request('http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findCompletedItems&SERVICE-VERSION=1.7.0&SECURITY-APPNAME=ScottBer-testing-PRD-913d8b941-841f4c02&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+search.term+'&paginationInput.pageNumber='+(Number(pageInfo.pageNumber[0])+1), searchCallback)
+	  		request('http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findCompletedItems&SERVICE-VERSION=1.7.0&SECURITY-APPNAME='+process.env.API_KEY+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+search.term+'&paginationInput.pageNumber='+(Number(pageInfo.pageNumber[0])+1), searchCallback)
 				return
 	  	}
 
@@ -71,7 +71,7 @@ router.post('/search', function(req, res, next) {
     	res.send(JSON.stringify({ title:'Express', tbl:tbl, total:total, sold:sold, monthTbl:monthTbl, dayTbl:dayTbl, cur30:cur30, prev60:prev60}));
 	  }
 	}
-	request('http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findCompletedItems&SERVICE-VERSION=1.7.0&SECURITY-APPNAME=ScottBer-testing-PRD-913d8b941-841f4c02&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+search.term, searchCallback)
+	request('http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findCompletedItems&SERVICE-VERSION=1.7.0&SECURITY-APPNAME='+process.env.API_KEY+'&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='+search.term, searchCallback)
   
 });
 module.exports = router;
@@ -80,5 +80,5 @@ module.exports = router;
 function daysBetween(date1, date2) {
 	date1 = date1.split('-');
 	date1 = new Date(date1[0], --date1[1], date1[2]);
-  return (Math.abs((+date1) - (+date2))/8.64e7);
+	return (Math.abs((+date1) - (+date2))/8.64e7);
 }
